@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,12 +8,6 @@ public class CubeFactory : MonoBehaviour
 
     // list of cubes
     public List<GameObject> cubes = new List<GameObject>();
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
@@ -36,10 +29,10 @@ public class CubeFactory : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R) && cubes.Count > 0)
         {
-            // remove last cube
-            GameObject lastCube = cubes[0];
-            cubes.Remove(lastCube);
-            Destroy(lastCube);
+            // remove oldest cube
+            GameObject oldestCube = cubes[0];
+            cubes.Remove(oldestCube);
+            Destroy(oldestCube);
 
             // print number of cubes
             Debug.Log(cubes.Count);
