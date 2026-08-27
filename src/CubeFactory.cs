@@ -14,17 +14,25 @@ public class CubeFactory : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            // create a new cube
-            GameObject newCube = Instantiate(cubePrefab);
+            // report the unassigned prefab instead of spawning
+            if (cubePrefab == null)
+            {
+                Debug.LogError("CubeFactory: the Cube Prefab field is unassigned, so no cube was spawned. Assign a prefab to the Cube Prefab field of the CubeFactory component.", this);
+            }
+            else
+            {
+                // create a new cube
+                GameObject newCube = Instantiate(cubePrefab);
 
-            // set position
-            newCube.transform.position = new Vector3(0, 0, 0);
+                // set position
+                newCube.transform.position = new Vector3(0, 0, 0);
 
-            // add to list
-            cubes.Add(newCube);
+                // add to list
+                cubes.Add(newCube);
 
-            // print number of cubes
-            Debug.Log(cubes.Count);
+                // report the spawn and the resulting number of cubes
+                Debug.Log("CubeFactory: spawned cube, count is now " + cubes.Count);
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.R) && cubes.Count > 0)
@@ -34,8 +42,8 @@ public class CubeFactory : MonoBehaviour
             cubes.Remove(oldestCube);
             Destroy(oldestCube);
 
-            // print number of cubes
-            Debug.Log(cubes.Count);
+            // report the removal and the resulting number of cubes
+            Debug.Log("CubeFactory: removed cube, count is now " + cubes.Count);
         }
     }
 }
