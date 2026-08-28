@@ -18,8 +18,8 @@ This repository is a drop-in script, not a Unity project. There is no scene, no
 3. Attach the `CubeFactory` component to it.
 4. Assign the cube prefab to the component's **Cube Prefab** field in the Inspector.
 
-The **Cube Prefab** field has no default value. If it is left unassigned, spawning
-will fail at runtime.
+The **Cube Prefab** field has no default value. If it is left unassigned, pressing
+`E` spawns nothing and writes an error to the Console naming the field to assign.
 
 ## Controls
 
@@ -38,8 +38,11 @@ held.
   visible spread.
 - `R` removes the **oldest** cube still tracked, not the most recently spawned one.
 - Pressing `R` with no cubes tracked does nothing.
-- After each spawn and each removal, the resulting cube count is written to the
-  Console.
+- After each spawn and each removal, a labelled message naming the action and the
+  resulting cube count is written to the Console — for example
+  `CubeFactory: spawned cube, count is now 1`.
+- Pressing `E` while **Cube Prefab** is unassigned logs an error naming the field
+  and leaves the tracked list unchanged.
 
 ## Inspector fields
 
