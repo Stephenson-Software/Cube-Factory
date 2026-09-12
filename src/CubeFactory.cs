@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CubeFactory : MonoBehaviour
 {
-    // get prefab
+    // prefab instantiated on each spawn, assigned in the Inspector
     public GameObject cubePrefab;
 
     // list of cubes
