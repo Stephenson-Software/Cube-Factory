@@ -11,6 +11,11 @@ This repository is a drop-in script, not a Unity project. There is no scene, no
 1. Copy `src/CubeFactory.cs` into the `Assets/` folder of an existing Unity project.
 2. Let Unity finish compiling; the `CubeFactory` component becomes available.
 
+The script reads the keyboard through the legacy `UnityEngine.Input` API. The
+project's **Active Input Handling** setting (Project Settings → Player → Other
+Settings) must be `Input Manager (Old)` or `Both`; with `Input System Package (New)`
+alone, that API is not serviced and neither key is read.
+
 ## Setup
 
 1. Create a cube prefab (for example, from a built-in `Cube` GameObject).
