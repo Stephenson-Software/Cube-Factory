@@ -39,7 +39,7 @@ public class CubeFactory : MonoBehaviour
         {
             // remove oldest cube
             GameObject oldestCube = cubes[0];
-            cubes.Remove(oldestCube);
+            cubes.RemoveAt(0);
             Destroy(oldestCube);
 
             // report the removal and the resulting number of cubes
