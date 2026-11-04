@@ -43,6 +43,10 @@ held.
   visible spread.
 - `R` removes the **oldest** cube still tracked, not the most recently spawned one.
 - Pressing `R` with no cubes tracked does nothing.
+- The component only updates the tracked list when `E` or `R` handles a cube. A cube
+  destroyed any other way, such as from the Hierarchy or by another script, keeps its
+  entry, so it still counts towards the logged count. When `R` reaches that entry it
+  removes the entry, but no visible cube disappears.
 - After each spawn and each removal, a labelled message naming the action and the
   resulting cube count is written to the Console — for example
   `CubeFactory: spawned cube, count is now 1`.
