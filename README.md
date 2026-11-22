@@ -2,6 +2,27 @@
 
 This unity asset instantiates, keeps track of and removes cubes based on player input.
 
+The diagram below shows what the component does each frame. It is drawn from
+`src/CubeFactory.cs`; it is a diagram, not a screenshot of a running scene.
+
+```mermaid
+flowchart TD
+    U(["Update() — every frame"]) --> E{"E pressed<br/>this frame?"}
+    E -- no --> R
+    E -- yes --> P{"Cube Prefab<br/>assigned?"}
+    P -- no --> ERR["Debug.LogError:<br/>Cube Prefab field is unassigned"]
+    P -- yes --> SP["Instantiate(cubePrefab)<br/>at (0, 0, 0)"]
+    SP --> ADD["cubes.Add(newCube)"]
+    ADD --> L1["Debug.Log:<br/>spawned cube, count is now N"]
+    ERR --> R
+    L1 --> R{"R pressed this frame<br/>and cubes.Count &gt; 0?"}
+    R -- no --> DONE(["end of frame"])
+    R -- yes --> OLD["take cubes[0]<br/>(the oldest cube)"]
+    OLD --> RM["cubes.RemoveAt(0)<br/>Destroy(oldestCube)"]
+    RM --> L2["Debug.Log:<br/>removed cube, count is now N"]
+    L2 --> DONE
+```
+
 ## Installation
 
 This repository is a drop-in script, not a Unity project. There is no scene, no
@@ -52,6 +73,53 @@ held.
   `CubeFactory: spawned cube, count is now 1`.
 - Pressing `E` while **Cube Prefab** is unassigned logs an error naming the field
   and leaves the tracked list unchanged.
+
+## Diagrams
+
+### Tracked list order
+
+`E` appends to the end of the `cubes` list and `R` removes from the front, so the
+list behaves as a first-in, first-out queue. The sequence below traces three
+presses of `E` followed by one press of `R`, with the Console line each press
+writes.
+
+```mermaid
+sequenceDiagram
+    actor Player
+    participant CF as CubeFactory
+    participant L as cubes list
+    Player->>CF: E
+    CF->>L: Add(cube A)  → [A]
+    Note right of CF: spawned cube, count is now 1
+    Player->>CF: E
+    CF->>L: Add(cube B)  → [A, B]
+    Note right of CF: spawned cube, count is now 2
+    Player->>CF: E
+    CF->>L: Add(cube C)  → [A, B, C]
+    Note right of CF: spawned cube, count is now 3
+    Player->>CF: R
+    CF->>L: RemoveAt(0)  → [B, C]
+    CF->>CF: Destroy(cube A)
+    Note right of CF: removed cube, count is now 2
+```
+
+### Cubes destroyed elsewhere
+
+A cube destroyed outside the component (from the Hierarchy or another script)
+keeps its entry in `cubes`, so the logged count still includes it until `R`
+reaches that entry.
+
+```mermaid
+sequenceDiagram
+    participant Other as Hierarchy / other script
+    participant CF as CubeFactory
+    participant L as cubes list
+    Note over L: [A, B]
+    Other->>Other: Destroy(cube A)
+    Note over L: still [A (destroyed), B]
+    CF->>L: R → RemoveAt(0) → [B]
+    Note right of CF: removed cube, count is now 1<br/>(no visible cube disappears)
+```
 
 ## Inspector fields
 
